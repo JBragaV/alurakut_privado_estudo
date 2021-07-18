@@ -16,12 +16,35 @@ function FotoSideBar(props) {
   )
 }
 
+function CompontenteLista(props) {
+  console.log(props.lista)
+  return (
+    <Nudes>
+    Comunidades ({props.lista.length})
+      <ul>
+        {props.lista.map(item => {
+            return (<li key={item.id}>
+              <img src={item.avatar_url}/>
+              <span>{item.login}</span>
+            </li>)
+          })
+        }
+      </ul>
+    </Nudes>
+  )
+}
+
 export default function Home() {
   const [comunidades, setComunidades] = React.useState([])
   console.log(comunidades)
   console.log(setComunidades)
   const user = 'JBragaV'
-  const fotosApontado = ['JBragaV', 'JBragaV', 'JBragaV']
+  const [seguidoresJo, setSeguidoresJo] = React.useState([])
+  React.useEffect(() => {
+    fetch("https://api.github.com/users/JBragaV/followers")
+    .then(respostaServidor => respostaServidor.json())
+    .then(respostaCompleta => setSeguidoresJo(respostaCompleta))
+  }, [])
 
   return (
     <>
@@ -66,18 +89,7 @@ export default function Home() {
           </Box>
         </div>
         <div className="nudes" style = {{gridArea: 'nudes' }}>
-          <Nudes>
-          Comunidades ({comunidades.length})
-            <ul>
-              {comunidades.map(comunidade => {
-                  return (<li key={comunidade.id}>
-                    <img src={'http://placehold.it/300x300'}/>
-                    <span>{comunidade.name}</span>
-                  </li>)
-                })
-              }
-            </ul>
-          </Nudes>
+        <CompontenteLista lista = {seguidoresJo} />
         </div>
       </MainGrid>
     </>
